@@ -1,3 +1,6 @@
+*.sql
+*.csv
+*.local.*
 *.gem
 *.rbc
 /.config

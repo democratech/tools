@@ -1,0 +1,57 @@
+\documentclass[conference]{IEEEtran}
+\newcommand*{\rootPath}{./}
+
+\input{\rootPath Annexes/Packages.tex}
+%\newcolumntype{C}[1]{>{\centering}m{#1}}
+%\newcolumntype{C}[1]{>{\centering\raggedright\arraybackslash}m{#1}}
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+ 
+\standalonetrue
+
+\title{Syst\`eme de vote sur la Primaire.org}
+ 
+\author{
+    \IEEEauthorblockN{Pierre-Louis Guhur, Thibauld Favre}
+}
+
+
+\begin{document}
+  
+  
+\maketitle
+
+
+\begin{abstract} 
+LaPrimaire.org organise une primaire ouverte en France pour les \'elections pr\'esidentielles de 2017. Elle rel\`eve le d\'efi d'organiser un vote d\'emocratique avec plus d'une centaine de candidats. Le syst\'eme de vote pr\'esidentiel, appel\'e \emph{vote majoritaire} n'est pas adapt\'e \'a un tel vote. La raison principale est que tous les \'electeurs ne peuvent pas \'etudier attentivement chacun des candidats. En outre, le vote majoritaire comporte plusieurs inconv\'enients qui faussent la repr\'esentativit\'e du vote. LaPrimaire.org a donc developp\'e un nouveau syst\`eme de vote, bas\'e sur le Jugement Majoritaire. Plus sp\'ecifiquement, le vote se d\'eroule en deux phases, au cours desquelles un \'electeur attribut \`a chaque candidat un jugement Tr\`es bien, Bien, Assez bien, Correct ou D\'efavorable. Lors de la premi\'ere phase, les jugements ne sont exprim\'es que sur un lot de 10 candidats. Cet article montre comment construire ces lots et quel est le nombre minimum d'\'electeurs n\'ecessaires pour assurer la fiabilit\'e de ce syst\`eme de vote.
+\end{abstract}
+
+
+
+\input{\rootPath Parts/introduction}
+
+\input{\rootPath Parts/mv}
+\input{\rootPath Parts/mj}
+
+\input{\rootPath Parts/laprimaire}
+
+
+\section{Conclusion}
+
+Cet article pr\'esente le syst\^eme de vote de laPrimaire.org. En construisant judicieusement des lots de candidats, nous avons montr\'e que le classement du vote est le m\^eme lorsque les \'electeurs votent pour ces lot plut\^ot que pour tous les candidats. 
+
+
+
+
+
+%%=============================================================================
+%%=============================================================================
+\ifstandalone
+	\bibliographystyle{IEEEtran}
+	\bibliography{\rootPath Annexes/biblio.bib}
+\fi
+%%=============================================================================
+%%=============================================================================
+
+\end{document}
