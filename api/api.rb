@@ -1,4 +1,4 @@
-require_relative '../../config/keys.local.rb'
+require_relative '../config/keys.local.rb'
 require 'csv'
 require 'uri'
 require 'net/http'
