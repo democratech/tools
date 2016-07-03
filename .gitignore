@@ -1,4 +1,4 @@
-*.sql
+sql
 *.csv
 *.local.*
 *.gem
