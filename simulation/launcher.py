@@ -30,20 +30,24 @@ if __name__ == '__main__':
     except OSError:
         pass
         
-    Nelecteurs = np.arange(50000,105000,5000)
-    Ncandidats = np.arange(50,110,10)
-    Nlot       = 10
-    Nmentions  = 7
+    Nelecteurs = 100000
+    electeurs  = np.arange(10000, Nelecteurs,1000)
+    sizeE      = len(electeurs)
+    sizeC      = 1
+    Ncandidats = 16#np.arange(50,110,10)
+    candidats  = [Ncandidats]
+    Nlot       = 5
+    Nmentions  = 5
     Ntest      = 5 # chaque Nelecteurs est teste Ntest fois
-    Nworkers   = Ntest*len(Nelecteurs)*len(Ncandidats)
+    Nworkers   = Ntest*sizeE*sizeC
     data       = "scripts/terranova.txt"
     args       = []
-    for i in range(len(Ncandidats)):
-        for j in range(len( Nelecteurs)):
+    for i in range(sizeC):
+        for j in range(sizeE):
             for t in range(Ntest):
                 
-                c = Ncandidats[i]
-                e = Nelecteurs[j]
+                c = candidats[i]
+                e = electeurs[j]
                 folder = root + "C_%i.E_%i_%i/" % (c,e,t)
                 #shutil.rmtree(folder, True)
                 try:
