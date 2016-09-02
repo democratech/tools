@@ -58,6 +58,7 @@ def subset(Ncandidats, Nlot, occurences):
     return lot
     
 def vote(lot, proba, Nmentions): 
+    Nlot  = len(lot)
     votes = np.zeros(Nlot)
     for i in range(Nlot):  
     	distrib = rv_discrete(values=(range(Nmentions), proba[i,:]))
@@ -65,8 +66,9 @@ def vote(lot, proba, Nmentions):
     return votes
     
 def argMedian(A):
-    s   = np.array([sum(A[:i+1]) for i in range(len(A))])
-    mid = float(s[5-1])/2
+    Nmentions = len(A)
+    s   = np.array([sum(A[:i+1]) for i in range(Nmentions)])
+    mid = float(s[Nmentions-1])/2
     return np.argwhere(mid < s)[0][0]
     
 def tieBreaking(A, B):

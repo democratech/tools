@@ -38,7 +38,7 @@ if __name__ == '__main__':
     candidats  = [Ncandidats]
     Nlot       = 5
     Nmentions  = 5
-    Ntest      = 5 # chaque Nelecteurs est teste Ntest fois
+    Ntest      = 1 # chaque Nelecteurs est teste Ntest fois
     Nworkers   = Ntest*sizeE*sizeC
     data       = "scripts/terranova.txt"
     args       = []
