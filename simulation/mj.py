@@ -25,18 +25,18 @@ def normalize(v, ax=1):
 def probaCandidates(N, inFile, outFile):
     """Read inFile. If there is not enough candidates, interpolate other. Save in outFile """    
     inCandidates = np.genfromtxt(inFile, delimiter = " ", dtype=float)
-    inCandidates = inCandidates[:,:7]
+    inCandidates = inCandidates[:,:5]
     Nc = len(inCandidates)
-    param = np.zeros((7,2))
+    param = np.zeros((5,2))
     param[:,0] = np.mean(inCandidates, axis=0)
     param[:,1] = np.std(inCandidates, axis=0)
     if Nc > N:
         random.shuffle(inCandidates)
         outCandidates = inCandidates[:N,:]
     else:
-        outCandidates = np.zeros((N,7))
+        outCandidates = np.zeros((N,5))
         outCandidates[:Nc,:] = inCandidates
-        for i in range(7):
+        for i in range(5):
             coeff = np.random.normal(param[i,0], param[i,1], N-Nc)
             outCandidates[Nc:,i] = coeff
             # neg = outCandidates[Nc:,i]<0
@@ -57,16 +57,18 @@ def subset(Ncandidats, Nlot, occurences):
     occurences[lot] += 1
     return lot
     
-def vote(lot, proba, Nlot): 
+def vote(lot, proba, Nmentions): 
+    Nlot  = len(lot)
     votes = np.zeros(Nlot)
     for i in range(Nlot):  
-    	distrib = rv_discrete(values=(range(7), proba[i,:]))
-        votes[i] =  distrib.rvs() 
+    	distrib = rv_discrete(values=(range(Nmentions), proba[i,:]))
+        votes[i] = distrib.rvs()
     return votes
     
 def argMedian(A):
-    s   = np.array([sum(A[:i+1]) for i in range(7)])
-    mid = float(s[7-1])/2
+    Nmentions = len(A)
+    s   = np.array([sum(A[:i+1]) for i in range(Nmentions)])
+    mid = float(s[Nmentions-1])/2
     return np.argwhere(mid < s)[0][0]
     
 def tieBreaking(A, B):
@@ -115,7 +117,7 @@ def simulation(Ncandidats,Nelecteurs, Nlot, Nmentions, root, output,id=0):
             lot     = subset(Ncandidats, Nlot, occurence)
             if logging:
                 log_subset(lot, flog)
-            votes   = vote(lot, probaCandidats[lot,:], Nlot)
+            votes   = vote(lot, probaCandidats[lot,:], Nmentions)
             for i in range(Nlot):
                 raw[lot[i],votes[i]] += 1
         np.savetxt(root  + "raw."+resName, raw, delimiter = ",")
@@ -173,7 +175,7 @@ if __name__ == '__main__':
     parser.add_argument('--nv',  type=int, help='Number of voters', default=120000)
     parser.add_argument('--nc',  type=int, help='Number of candidates', default=100)
     parser.add_argument('--ns',  type=int, help='Number of candidates in a subset', default=10)
-    parser.add_argument('--ng',  type=int, help='Number of grades', default=7)
+    parser.add_argument('--ng',  type=int, help='Number of grades', default=5)
     parser.add_argument('--root',  type=str, help='Root for paths', default="")
     parser.add_argument('--log_subset',  action='store_true', help='Logging subsets')
     

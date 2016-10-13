@@ -7,9 +7,9 @@ import sys, os
 # ---------------------------------------------------------------------------------------------------
 # montrer que l'algorithme de construction des lots est fiable
 # 
-Ncandidats  = 100
+Ncandidats  = 16
 electeurs   = np.arange(10000,100000,10000)
-Nlot        = 10
+Nlot        = 5
 root        = "simulation/lots/"
 
 
@@ -88,4 +88,4 @@ def plotCorrelations(corr):
 # plot 3
 # 
 [occr,corr] = simulation(100000, Nlot)
-plotCorrelations(corr)
+# plotCorrelations(corr)
