@@ -48,7 +48,11 @@ def send_command(data)
 	request.add_field("Secret-Key",SECRET)
 	request.add_field('Content-Type', 'application/json')
 	request.body = JSON.dump(data)
-	http.request(request)
+	res=http.request(request)
+	puts "#{res.inspect}"
+	puts "#{res.to_hash.inspect}"
+	puts "#{res.code}"
+	puts "#{res.message}"
 end
 
 def generate_code(size = 6)
@@ -307,6 +311,18 @@ when 'reset'
 	end
 when 'broadcast'
 	case cmd
+	when 'tricheur'
+		input_file=ARGV[2]
+		exit("missing input file") if input_file.nil? or !File.exist?(input_file)
+		msg=File.read(input_file).strip
+		send_command(JSON.parse(data2 % {
+			cmd: "api/broadcast\n#{msg.strip}".to_json,
+			user_id:value,
+			firstname:'test',
+			lastname:'TEST',
+			username:'testtesttest1',
+			date:Time.now().to_i
+		}))
 	when 'user_id'
 		input_file=ARGV[2]
 		exit("missing input file") if input_file.nil? or !File.exist?(input_file)
