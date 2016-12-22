@@ -53,18 +53,6 @@ def tag_donors(db,mandrill)
 	return users
 end
 
-def remind_new_signups_to_auth(db,mandrill)
-	if TEST_EMAIL then
-		users=[{'email'=>'tfavre@gmail.com','user_key'=>'XXXX'}]
-	else
-		q="SELECT u.email,u.user_key,u.registered FROM users AS u WHERE u.registered > current_date -2 AND u.registered < current_date AND u.email NOT IN (SELECT email FROM ballots WHERE vote_id=1) AND u.email_status>=0"
-		res=db.exec(q)
-		users=res.num_tuples.zero? ? nil : res
-	end
-	send_emails(mandrill,users,"laprimaire-org-forgot-to-auth-after-signup","Un petit oubli ?") unless users.nil?
-	return users
-end
-
 def send_emails(mandrill,users,template,subject)
 	return if (users.nil? || template.nil? || subject.nil?)
 	emails=[]
@@ -102,4 +90,3 @@ end
 
 tag_voters(db,mandrill)
 tag_donors(db,mandrill)
-remind_new_signups_to_auth(db,mandrill)
