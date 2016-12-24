@@ -1,4 +1,4 @@
-require '../config/keys.local.rb'
+require_relative '../config/keys.local.rb'
 require 'mandrill'
 require 'pg'
 require 'csv'
@@ -33,7 +33,7 @@ def tag_voters(db,mandrill)
 	if TEST_EMAIL then
 		users=[{'email'=>'tfavre@gmail.com','user_key'=>'XXXX'}]
 	else
-		q="UPDATE users as u SET tags=array_append(tags,'voteur2') FROM ballots as b WHERE b.email=u.email AND NOT (u.tags @> ARRAY['voteur2']) AND b.vote_id=1 AND b.vote_status='success' RETURNING u.email, u.user_key"
+		q="UPDATE users as u SET tags=array_append(tags,'voteur2') FROM ballots as b WHERE b.email=u.email AND NOT (u.tags @> ARRAY['voteur2']) AND b.vote_id=2 AND b.vote_status='success' RETURNING u.email, u.user_key"
 		res=db.exec(q)
 		users=res.num_tuples.zero? ? nil : res
 	end

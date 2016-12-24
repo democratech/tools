@@ -613,12 +613,21 @@ end
 def email_citizens_authenticated_2nd_vote(db,mandrill)
 	#get_citizens="SELECT user_key,email,firstname,lastname, 3 as missing FROM users WHERE email IS NOT NULL AND email='tfavre@gmail.com' LIMIT 2"
 	#get_citizens="select email,user_key from users where validation_level<3 and email_status=2 and (registered>'2016-11-07' and registered<'2016-12-12') order by registered asc"
-	get_citizens="select email,user_key from tmp_emails order by email asc"
+	#get_citizens="select u.email,u.user_key from users as u where validation_level<3 and email_status=2 and registered<'2016-03-01'" #DONE
+	#get_citizens="select u.email,u.user_key from users as u where validation_level<3 and email_status=2 and (registered>'2016-03-01' and registered<'2016-04-01')" # 1500/2000 DONE
+	get_citizens="select u.email,u.user_key from users as u where validation_level<3 and email_status=2 and (registered>'2016-04-01' and registered<'2016-11-01')"
+	#get_citizens="select u.email,u.user_key from users as u where validation_level<3 and email_status=2 and (registered>'2016-04-01' and registered<'2016-05-01')"
+	subject="Pour un VRAI choix en 2017 : plus que quelques jours pour voter !"
+	#get_citizens="select u.email,u.user_key from users as u where validation_level<3 and email_status=2 and (registered>'2016-11-01' and registered<'2016-12-15')"
+	#get_citizens="select u.email,u.user_key from users as u where validation_level<3 and email_status=2 and (registered>'2016-07-01' and registered<'2016-11-01')"
+	#subject="Votez et changez la donne en 2017 !"
+	#get_citizens="select email,user_key from tmp_emails order by email asc"
 	res_citizens=db.exec(get_citizens)
 	if not res_citizens.num_tuples.zero? then
 		emails=[]
 		res_citizens.each do |r|
 			message= {
+				:subject=>subject,
 				:to=>[{
 					:email=> "#{r['email']}"
 				}],
@@ -634,18 +643,22 @@ def email_citizens_authenticated_2nd_vote(db,mandrill)
 		end
 	end
 	results=[]
+	threads=[]
 	emails.each do |k|
-		begin
-			result=mandrill.messages.send_template("laprimaire-org-2eme-tour-de-vote",[],k)
-			puts "sending email to #{k[:to][0][:email]} #{result.inspect}"
-			results.push({:email=>result[0]['email'], :status=>result[0]['status'],:reject_reason=>result[0]['reject_reason'],:id=>result[0]['_id']})
-			sleep(2)
-		rescue Mandrill::Error => e
-			msg="A mandrill error occurred: #{e.class} - #{e.message}"
-			puts msg
-		end
+		#threads << Thread.new do
+			begin
+				result=mandrill.messages.send_template("laprimaire-org-2eme-tour-de-vote",[],k)
+				puts "sending email to #{k[:to][0][:email]} #{result.inspect}"
+				results.push({:email=>result[0]['email'], :status=>result[0]['status'],:reject_reason=>result[0]['reject_reason'],:id=>result[0]['_id']})
+			rescue Mandrill::Error => e
+				msg="A mandrill error occurred: #{e.class} - #{e.message}"
+				puts msg
+			end
+		#end
+		sleep(0.5)
 	end
-	File.write("20161217_email_shoot_citizens_authenticated_2nd_vote.txt",JSON.dump(results))
+	#threads.each {|t| t.join}
+	File.write("20161223_email_shoot_not_authenticated_2nd_vote#2.txt",JSON.dump(results))
 end
 
 email_citizens_authenticated_2nd_vote(db,mandrill)

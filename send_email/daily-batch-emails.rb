@@ -1,4 +1,4 @@
-require '../config/keys.local.rb'
+require_relative '../config/keys.local.rb'
 require 'mandrill'
 require 'pg'
 require 'csv'
@@ -33,7 +33,7 @@ def remind_new_signups_to_auth(db,mandrill)
 	if TEST_EMAIL then
 		users=[{'email'=>'tfavre@gmail.com','user_key'=>'XXXX'}]
 	else
-		q="SELECT u.email,u.user_key,u.registered FROM users AS u WHERE u.registered > current_date -2 AND u.registered < current_date AND u.email NOT IN (SELECT email FROM ballots WHERE vote_id=1) AND u.email_status>=0"
+		q="SELECT u.email,u.user_key,u.registered FROM users AS u WHERE u.registered > current_date -1 AND u.registered < current_date AND u.email NOT IN (SELECT email FROM ballots WHERE vote_id=2) AND u.email_status>=0"
 		res=db.exec(q)
 		users=res.num_tuples.zero? ? nil : res
 	end
