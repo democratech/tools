@@ -37,7 +37,7 @@ def remind_new_signups_to_auth(db,mandrill)
 		res=db.exec(q)
 		users=res.num_tuples.zero? ? nil : res
 	end
-	send_emails(mandrill,users,"laprimaire-org-forgot-to-auth-after-signup","Un petit oubli ?") unless users.nil?
+	send_emails(mandrill,users,"laprimaire-org-forgot-to-auth-after-signup","ATTENTION : Fin du vote dans quelques heures !") unless users.nil?
 	return users
 end
 

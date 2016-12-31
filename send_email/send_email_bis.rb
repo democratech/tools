@@ -663,7 +663,7 @@ end
 
 def email_citizens_account_validated(db,mandrill)
 	#get_citizens="SELECT user_key,email,firstname,lastname, 3 as missing FROM users WHERE email IS NOT NULL AND email='tfavre@gmail.com' LIMIT 2"
-	get_citizens="select u.email,u.user_key from users as u where tags @> ARRAY['manual_validation_4']"
+	get_citizens="select u.email,u.user_key from users as u where tags @> ARRAY['manual_validation_7']"
 	subject="Votre compte vient d'être validé, vous pouvez désormais voter !"
 	res_citizens=db.exec(get_citizens)
 	if not res_citizens.num_tuples.zero? then
@@ -790,9 +790,9 @@ def email_citizens_last_chance(db,mandrill)
 	File.write("20161230_email_dernier_rappel.txt",JSON.dump(results))
 end
 
-email_citizens_last_chance(db,mandrill)
+#email_citizens_last_chance(db,mandrill)
 #email_citizens_birthday_corrected(db,mandrill)
-#email_citizens_account_validated(db,mandrill)
+email_citizens_account_validated(db,mandrill)
 #email_citizens_authenticated_2nd_vote(db,mandrill)
 #email_citizens_pre_authenticate(db,mandrill) #DONE
 #email_citizens_missing_votes(db,mandrill) #DONE
