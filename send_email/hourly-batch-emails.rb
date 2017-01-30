@@ -41,11 +41,23 @@ def tag_voters(db,mandrill)
 	return users
 end
 
+def tag_donors_charlotte(db,mandrill)
+	if TEST_EMAIL then
+		users=[{'email'=>'tfavre@gmail.com','user_key'=>'XXXX','amount'=>100.00}]
+	else
+		q="UPDATE users as u SET tags=array_append(tags,'donateur_charlotte') FROM donations as d WHERE d.email=u.email AND NOT (u.tags @> ARRAY['donateur_charlotte']) AND d.origin='payzen' AND d.candidate_id is not null AND d.status='AUTHORISED' RETURNING u.email,u.user_key,d.amount"
+		res=db.exec(q)
+		users=res.num_tuples.zero? ? nil : res
+	end
+	send_emails(mandrill,users,"laprimaire-org-don-thank-you-charlotte","Merci énormément pour votre don !") unless users.nil?
+	return users
+end
+
 def tag_donors(db,mandrill)
 	if TEST_EMAIL then
 		users=[{'email'=>'tfavre@gmail.com','user_key'=>'XXXX','amount'=>100.00}]
 	else
-		q="UPDATE users as u SET tags=array_append(tags,'donateur_parti') FROM donations as d WHERE d.email=u.email AND NOT (u.tags @> ARRAY['donateur_parti']) AND d.origin='payzen' RETURNING u.email, u.user_key,d.amount"
+		q="UPDATE users as u SET tags=array_append(tags,'donateur_parti') FROM donations as d WHERE d.email=u.email AND NOT (u.tags @> ARRAY['donateur_parti']) AND d.origin='payzen' AND d.candidate_id is null AND d.status='AUTHORISED' RETURNING u.email, u.user_key,d.amount"
 		res=db.exec(q)
 		users=res.num_tuples.zero? ? nil : res
 	end
@@ -88,5 +100,6 @@ def send_emails(mandrill,users,template,subject)
 	File.write(Time.new.strftime("%Y-%m%d-%H:%M")+template+".txt",JSON.dump(results))
 end
 
-tag_voters(db,mandrill)
+#tag_voters(db,mandrill)
 tag_donors(db,mandrill)
+tag_donors_charlotte(db,mandrill)
