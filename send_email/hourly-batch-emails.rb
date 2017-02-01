@@ -45,7 +45,7 @@ def tag_candidates(db,mandrill)
 	if TEST_EMAIL then
 		users=[{'email'=>'tfavre@gmail.com','user_key'=>'XXXX'}]
 	else
-		q="update candidates_elections as ce set accepted=true from candidates as c inner join (select y.email from (select d.email,sum(d.amount) from donations as d inner join candidates as c on (c.email=d.email) where d.status='AUTHORISED' group by d.email) as y where y.sum>=30) as w on (c.email=w.email) where ce.accepted=false and ce.candidate_id=c.candidate_id and ce.election_id=2 returning *"
+		q="update candidates_elections as ce set accepted=true from candidates as c inner join (select y.email from (select d.email,sum(d.amount) from donations as d inner join candidates as c on (c.email=d.email) where d.status='AUTHORISED' and d.candidate_id is null group by d.email) as y where y.sum>=30) as w on (c.email=w.email) where ce.accepted=false and ce.candidate_id=c.candidate_id and ce.election_id=2 returning *"
 		res=db.exec(q)
 		users=res.num_tuples.zero? ? nil : res
 	end
